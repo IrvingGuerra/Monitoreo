@@ -1,9 +1,38 @@
 #include "Solicitud.h"
 #include <iostream>
 
-Solicitud::Solicitud()
-{
+Solicitud::Solicitud(){
     socketlocal = new SocketDatagrama(0);
+}
+
+bool Solicitud::ipDisponible(const char *serverIpAdress, int serverPort){
+    //Creamos el cuerpo del mensaje
+    std::cout << "[ INFO ] " << "Enviando a: " << serverIpAdress << std::endl;
+    mensaje _request;
+    unsigned int requestID = rand();
+    _request.messageType = REQUEST;
+    _request.requestID = requestID;
+    _request.operationID = AVAIABLE;
+    memcpy(_request.args, "IS", 2);
+
+    PaqueteDatagrama saliente((char *)&_request, sizeof(_request), serverIpAdress, serverPort);
+    PaqueteDatagrama entrante(MAX_DATA_SIZE + 12);
+
+    //Intentamos enviar el dato 2 veces
+    register int i = 0;
+    for (i = 0; i < 2; i++) {
+        socketlocal->envia(saliente);
+        if (socketlocal->recibeTimeout(entrante, 1, 0) != -1) {
+            break;
+        }
+    }
+    if (i == 2) {
+        perror("El servidor no está dsponible. Intente más tarde.");
+        return 0;
+    }else{
+        return 1;
+    }
+
 }
 
 
@@ -14,9 +43,13 @@ char *Solicitud::doOperation(const char *serverIpAdress, int serverPort, int ope
     mensaje _request;
     unsigned int requestID = rand();
     // Se encapsula el tipo de mensaje, un identificador aleatorio y la operación a realizar.
-    _request = {REQUEST, requestID, operationID};
+    //_request = {REQUEST, requestID, operationID};
+    _request.messageType = REQUEST;
+    _request.requestID = requestID;
+    _request.operationID = operationID;
+
     // Se copian los argumentos de la operación a la estructura.
-    mempcpy(_request.args, args, argsLen);
+    memcpy(_request.args, args, argsLen);
 
     // Genera y envía paquete de datagrama.
     PaqueteDatagrama saliente((char *)&_request, sizeof(_request), serverIpAdress, serverPort);

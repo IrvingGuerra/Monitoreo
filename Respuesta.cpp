@@ -30,7 +30,7 @@ void Respuesta::sendReply(char *reply, unsigned int replyLen)
 {
     // Genera un mensaje para enviar la respuesta.
     mensaje _reply = {REPLY, requestID, operationID};
-    mempcpy(_reply.args, reply, replyLen);
+    memcpy(_reply.args, reply, replyLen);
 
     // Genera paquete.
     PaqueteDatagrama saliente((char *)&_reply, sizeof(_reply), clientIpAddress, clientPort);

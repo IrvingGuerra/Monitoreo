@@ -9,6 +9,9 @@
 #define SUB 2 // Resta
 #define DEPOSITO 3
 
+#define AVAIABLE 4
+#define CAPTURA 5
+
 // Tipos de mensaje.
 #define REQUEST 0
 #define REPLY 1
