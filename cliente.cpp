@@ -50,11 +50,11 @@ int main(int argc, char const *argv[]){
                 //Comenzamos a pedir la imagen
                 solicitud.makeScreenshoot(id_host, atoi(argv[2]), atoi(argv[5]));
             }
-            solicitud.cerrarSocket();
-            free(id_red_clean);
+            solicitud.cerrarSocket();          
             free(id_host);
             free(host);
         }
+        free(id_red_clean);
         usleep(atoi(argv[3]) * 1000000);
     }
     return 0;

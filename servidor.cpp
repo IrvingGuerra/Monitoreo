@@ -29,6 +29,7 @@ int main(int argc, char const *argv[]){
         }
 
         char *resultado = (char *) calloc(2,sizeof(char));
+        char *CMD = (char *) calloc(18,sizeof(char));
         if (respuesta.newRequest){
             switch (solicitud->operationID){
                 case AVAIABLE:{
@@ -39,11 +40,9 @@ int main(int argc, char const *argv[]){
                 case CAPTURA:
                 {   
                     std::cout << "[ INFO ] " << std::tab << "Tomar captura con calidad: " << solicitud->args <<std::endl;
-                    char *CMD = (char *) calloc(18,sizeof(char));
                     sprintf(CMD, "scrot screenshoot.png -q ");
                     strcat(CMD, solicitud->args);
                     system(CMD);
-                    free(CMD);
                     break;
                 }
             }
@@ -60,6 +59,7 @@ int main(int argc, char const *argv[]){
         
         respuesta.cerrarSocket();
         free(resultado);
+        free(CMD);
 
     }
 

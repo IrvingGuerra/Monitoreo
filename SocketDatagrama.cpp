@@ -123,8 +123,6 @@ int SocketDatagrama::recibeImagen(const char *serverIpAdress, int serverPort){
     sprintf(extension, ".png");
     strcat(filename, extension);
 
-    free(extension);
-
     std::cout << "[ SUCCESSS ] " << std::tab  << "Creando la imagen: " << filename << std::endl;
 
 
@@ -159,6 +157,8 @@ int SocketDatagrama::recibeImagen(const char *serverIpAdress, int serverPort){
     }
 
     std::cout << "[ SUCCESSS ] " << std::tab  << "Tamaño de imagen transferida: " << count << std::endl;
+
+    free(extension);
 
     return 1;
 }
