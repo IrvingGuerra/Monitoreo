@@ -43,6 +43,6 @@ void Respuesta::sendScreenshoot(){
 }
 
 void Respuesta::cerrarSocket(){
-    delete socketlocal;
+    delete socketLocal;
 }
 
