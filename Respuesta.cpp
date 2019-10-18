@@ -41,3 +41,8 @@ void Respuesta::sendReply(char *reply, unsigned int replyLen)
 void Respuesta::sendScreenshoot(){
     socketLocal->enviaImagen(clientIpAddress,clientPort);
 }
+
+void Respuesta::cerrarSocket(){
+    delete socketlocal;
+}
+

@@ -17,5 +17,6 @@ public:
 	// Operacion para preguntar si la IP es disponible para servidor
 	bool ipDisponible(const char *IpAddress, int puerto);
 	bool makeScreenshoot(const char *IpAddress, int puerto, int calidad);
+	void cerrarSocket();
 };
 #endif

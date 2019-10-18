@@ -16,11 +16,9 @@ int main(int argc, char const *argv[]){
         printf("Forma de ejecutar: ./%s  [LISTENING PORT]\n", argv[0]);
     }
 
-    Respuesta respuesta(atoi(argv[1]));
-    // Preparamos respuesta.
-
-
     while(true){
+        // Preparamos respuesta.
+        Respuesta respuesta(atoi(argv[1]));
         // Recibe mensaje.
         mensaje *solicitud = respuesta.getRequest();
         std::cout << "[ SUCCESS ] " << std::tab << "Mensaje recibido " <<std::endl;
@@ -59,7 +57,7 @@ int main(int argc, char const *argv[]){
             respuesta.sendReply(resultado, sizeof(resultado));
         }
         
-
+        respuesta.cerrarSocket();
     }
 
 
