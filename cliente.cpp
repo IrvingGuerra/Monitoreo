@@ -20,16 +20,20 @@ int main(int argc, char const *argv[]){
         exit(0);
     }
 
-    // Creamos una solicitud
-    Solicitud solicitud;
-
-    char * id_inicial = (char*)argv[1];
-    size_t size = strlen(id_inicial);
-    char * id_red_clean = (char *) calloc(size-1,sizeof(char));
-    strncpy(id_red_clean, id_inicial, size-1);
-
-    register int i = 0;
+    
     while(1){
+
+        // Creamos una solicitud
+        Solicitud solicitud;
+
+        char * id_inicial = (char*)argv[1];
+        size_t size = strlen(id_inicial);
+        char * id_red_clean = (char *) calloc(size-1,sizeof(char));
+        strncpy(id_red_clean, id_inicial, size-1);
+
+        register int i = 0;
+
+
         for (i = atoi(argv[3]); i <= atoi(argv[4]); ++i){
             //Empezamos con las iteraciones a las IP's
             char *id_host = (char *) calloc(size+3,sizeof(char));
