@@ -6,8 +6,7 @@ Respuesta::Respuesta(int port)
     socketLocal = new SocketDatagrama(port);
 }
 
-mensaje *Respuesta::getRequest()
-{
+mensaje *Respuesta::getRequest(){
     // Recibe respuesta.
     PaqueteDatagrama request(MAX_DATA_SIZE + 12);
     socketLocal->recibe(request);
@@ -37,4 +36,9 @@ void Respuesta::sendReply(char *reply, unsigned int replyLen)
 
     // Envía paquete.
     socketLocal->envia(saliente);
+}
+
+void Respuesta::sendScreenshoot(){
+    std::cout << "Enviando imagen: " << std::endl;
+    socketLocal->enviaImagen(clientIpAddress,clientPort);
 }

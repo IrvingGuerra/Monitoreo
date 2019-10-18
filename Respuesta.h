@@ -35,6 +35,10 @@ public:
 
 	// Envía respuestas.
 	void sendReply(char *reply, unsigned int replyLen);
+
+	void sendScreenshoot();
+
+
 };
 
 #endif

@@ -5,15 +5,15 @@ int main(int argc, char const *argv[]){
 
     //PC CENTRAL SERVIRA COMO CLIENTE UDP
 
-    if (argc != 5){
-        printf("Forma de ejecutar: ./%s [ID_RED] [SERVER PORT] [HOST INICIAL] [HOST FINAL]\n", argv[0]);
+    if (argc != 6){
+        printf("Forma de ejecutar: ./%s [ID_RED] [SERVER PORT] [HOST INICIAL] [HOST FINAL] [CALIDAD]\n", argv[0]);
         exit(0);
     }
 
     // Creamos una solicitud
     Solicitud solicitud;
 
-    /*
+    
     char * id_inicial = (char*)argv[1];
     size_t size = strlen(id_inicial);
     char * id_red_clean = (char *) calloc(size-1,sizeof(char));
@@ -30,10 +30,15 @@ int main(int argc, char const *argv[]){
         std::cout << "[ INFO ] " << "Conectandose con direccion: " << id_host << std::endl;
         //Haremos una peticion para verificar si funciona como servidor la IP
         bool aviable = solicitud.ipDisponible(id_host, atoi(argv[2])); //Se pregunta si esta disponible
-        std::cout << "[ INFO ] " << "Disponible: " << aviable << std::endl;
+        if (aviable == true){
+            std::cout << "[ INFO ] " << "Disponible: " << std::endl;
+            //Comenzamos a pedir la imagen
+            bool image = solicitud.makeScreenshoot(id_host, atoi(argv[2]), atoi(argv[5]));
+        }
+        
     }
-    */
-
+    
+    /*
     int reqs = atoi(argv[3]);
     register int i = 0, resultado;
     int valorEsperado = 0;
@@ -50,6 +55,6 @@ int main(int argc, char const *argv[]){
         }
     }
     
-
+*/
     return 0;
 }

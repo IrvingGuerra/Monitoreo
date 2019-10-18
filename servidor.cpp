@@ -8,7 +8,7 @@ int main(int argc, char const *argv[]){
     Respuesta respuesta(atoi(argv[1]));
     // Preparamos respuesta.
 
-/*
+
     while(true){
         // Recibe mensaje.
         mensaje *solicitud = respuesta.getRequest();
@@ -28,8 +28,12 @@ int main(int argc, char const *argv[]){
                     break;
                 }
                 case CAPTURA:
-                {
-                    
+                {   
+                    std::cout << "[ INFO ] " << "Tomar captura con calidad: " << solicitud->args <<std::endl;
+                    char *CMD = (char *) calloc(18,sizeof(char));
+                    sprintf(CMD, "scrot test.png -q ");
+                    strcat(CMD, solicitud->args);
+                    system(CMD);
                     break;
                 }
             }
@@ -38,11 +42,18 @@ int main(int argc, char const *argv[]){
             printf("Reenviando resultado: %s\n", resultado);
         }
         // Enviamos resultado.
-        respuesta.sendReply(resultado, sizeof(resultado));
+        if (solicitud->operationID == CAPTURA)        {
+            respuesta.sendScreenshoot();
+        }else{
+            printf("Entra aqui");
+            respuesta.sendReply(resultado, sizeof(resultado));
+        }
+        
 
     }
 
-*/
+
+    /*
     
     int resultado;
     int nbd = 0;
@@ -85,6 +96,6 @@ int main(int argc, char const *argv[]){
         respuesta.sendReply((char *)&resultado, sizeof(resultado));
     }
     
-
+    */
     return 0;
 }

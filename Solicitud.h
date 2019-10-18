@@ -16,5 +16,6 @@ public:
 	char *doOperation(const char *IpAddress, int puerto, int operationId, char *args, unsigned int argsLen);
 	// Operacion para preguntar si la IP es disponible para servidor
 	bool ipDisponible(const char *IpAddress, int puerto);
+	bool makeScreenshoot(const char *IpAddress, int puerto, int calidad);
 };
 #endif

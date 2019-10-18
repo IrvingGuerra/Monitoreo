@@ -7,13 +7,12 @@ Solicitud::Solicitud(){
 
 bool Solicitud::ipDisponible(const char *serverIpAdress, int serverPort){
     //Creamos el cuerpo del mensaje
-    std::cout << "[ INFO ] " << "Enviando a: " << serverIpAdress << std::endl;
     mensaje _request;
     unsigned int requestID = rand();
     _request.messageType = REQUEST;
     _request.requestID = requestID;
     _request.operationID = AVAIABLE;
-    memcpy(_request.args, "IS", 2);
+    memcpy(_request.args, "DISPONIBILIDAD", 2);
 
     PaqueteDatagrama saliente((char *)&_request, sizeof(_request), serverIpAdress, serverPort);
     PaqueteDatagrama entrante(MAX_DATA_SIZE + 12);
@@ -28,10 +27,33 @@ bool Solicitud::ipDisponible(const char *serverIpAdress, int serverPort){
     }
     if (i == 2) {
         perror("El servidor no está dsponible. Intente más tarde.");
-        return 0;
+        return false;
     }else{
-        return 1;
+        return true;
     }
+
+}
+
+bool Solicitud::makeScreenshoot(const char *serverIpAdress, int serverPort, int calidad){
+    mensaje _request;
+    unsigned int requestID = rand();
+    _request.messageType = REQUEST;
+    _request.requestID = requestID;
+    _request.operationID = CAPTURA;
+
+    char *quality = (char *) calloc(3,sizeof(char));
+    sprintf(quality, "%d", calidad);
+
+    memcpy(_request.args, quality, sizeof(quality));
+
+    PaqueteDatagrama saliente((char *)&_request, sizeof(_request), serverIpAdress, serverPort);
+    socketlocal->envia(saliente);
+
+    //Esperamos recibir el paquete datagrama con la imagen
+
+    socketlocal->recibeImagen(serverIpAdress, serverPort);
+
+    return true;
 
 }
 
