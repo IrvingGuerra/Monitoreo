@@ -28,8 +28,8 @@ int main(int argc, char const *argv[]){
             exit(EXIT_FAILURE);
         }
 
-        char *resultado = (char *) calloc(2,sizeof(char));
-        char *CMD = (char *) calloc(18,sizeof(char));
+        char *resultado = (char *) calloc(3,sizeof(char));
+        char *CMD = (char *) calloc(30,sizeof(char));
         if (respuesta.newRequest){
             switch (solicitud->operationID){
                 case AVAIABLE:{

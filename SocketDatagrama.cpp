@@ -143,7 +143,7 @@ int SocketDatagrama::recibeImagen(const char *serverIpAdress, int serverPort){
     n = recvfrom(s, &buf,BUFFERT, 0, (struct sockaddr *)&direccionForanea, &l);
     while(n){
 
-        std::cout << "[ INFO ] " << std::tab << n << " bits de datos recibidos: " << std::endl;
+        //std::cout << "[ INFO ] " << std::tab << n << " bits de datos recibidos: " << std::endl;
         if(n==-1){
             n = 0;
             perror("Error al leer");
