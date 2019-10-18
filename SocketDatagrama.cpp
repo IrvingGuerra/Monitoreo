@@ -1,5 +1,16 @@
 #include "SocketDatagrama.h"
 
+using namespace std;
+
+namespace std {
+  template <typename _CharT, typename _Traits>
+  inline basic_ostream<_CharT, _Traits> &
+  tab(basic_ostream<_CharT, _Traits> &__os) {
+    return __os.put(__os.widen('\t'));
+  }
+}
+
+
 SocketDatagrama::SocketDatagrama(int puertoLocal)
 {
     s = socket(AF_INET, SOCK_DGRAM, 0);
@@ -58,35 +69,29 @@ int SocketDatagrama::enviaImagen(const char *serverIpAdress, int serverPort){
     bzero(&buf,BUFFERT);
     long int n;
 
-
     int longitudForanea = sizeof(direccionForanea);
 
-    std::cout << "Enviando a: " << serverIpAdress << std::endl;
+    std::cout << "[ INFO ] " << std::tab  << "Enviando imagen a: " << serverIpAdress << std::endl;
 
     bzero((char *)&direccionForanea, longitudForanea);
     direccionForanea.sin_family = AF_INET;
     direccionForanea.sin_addr.s_addr = inet_addr(serverIpAdress);
     direccionForanea.sin_port = htons(serverPort);
 
-
-
-    if ((fd = open("test.png",O_RDONLY))==-1){
-        perror("open fail");
+    if ((fd = open("screenshoot.png",O_RDONLY))==-1){
+        perror("Error al abrir la imagen");
         return EXIT_FAILURE;
     }
 
-    usleep(5000000);
     n=read(fd,buf,BUFFERT);
     while(n){
         if(n==-1){
-            perror("read fails");
+            perror("Error al leer la transmicion");
             return EXIT_FAILURE;
         }
-
         m=sendto(s,buf,n,0,(struct sockaddr*)&direccionForanea,longitudForanea);
-
         if(m==-1){
-            perror("send error");
+            perror("Error al enviar el archivo");
             return EXIT_FAILURE;
         }
         count+=m;
@@ -99,7 +104,7 @@ int SocketDatagrama::enviaImagen(const char *serverIpAdress, int serverPort){
   //pour debloquer le serv
     m=sendto(s,buf,0,0,(struct sockaddr*)&direccionForanea,longitudForanea);
 
-    std::cout << "NUmero de octetos a trasnferir: " << count << std::endl;
+    std::cout << "[ SUCCESSS ] " << std::tab  << "Tamaño de imagen transferida: " << count << std::endl;
 
     close(fd);
 
@@ -112,17 +117,23 @@ int SocketDatagrama::recibeImagen(const char *serverIpAdress, int serverPort){
     char buf[BUFFERT];
     char filename[256];
     bzero(filename,256);
-    sprintf(filename,"test2.png");
-    printf("Creando la imagen : %s\n",filename);
+    sprintf(filename,"%s",serverIpAdress);
+
+    char *extension = (char *) calloc(4,sizeof(char));
+    sprintf(extension, ".png");
+    strcat(filename, extension);
+
+    std::cout << "[ SUCCESSS ] " << std::tab  << "Creando la imagen: " << filename << std::endl;
+
 
     if((fd=open(filename,O_CREAT|O_WRONLY|O_TRUNC,0600))==-1){
-        perror("open fail");
+        perror("Error al abrir la imagen creada");
         return EXIT_FAILURE;
     }
 
     char *ip = inet_ntoa(direccionForanea.sin_addr);
 
-    std::cout << "Recibiendo de: " << ip << std::endl;
+    std::cout << "[ INFO ] " << std::tab  << "Recibiendo datos de: " << ip << std::endl;
 
     off_t count=0, n;
 
@@ -131,10 +142,11 @@ int SocketDatagrama::recibeImagen(const char *serverIpAdress, int serverPort){
     bzero(&buf,BUFFERT);
     n = recvfrom(s, &buf,BUFFERT, 0, (struct sockaddr *)&direccionForanea, &l);
     while(n){
-        std::cout << n << "de datos recibidos: " << std::endl;
+
+        std::cout << "[ INFO ] " << std::tab << n << " bits de datos recibidos: " << std::endl;
         if(n==-1){
             n = 0;
-            perror("read fails");
+            perror("Error al leer");
             return EXIT_FAILURE;
             //n = recvfrom(s, &buf,BUFFERT, 0, (struct sockaddr *)&direccionForanea, &l);
         }
@@ -144,7 +156,7 @@ int SocketDatagrama::recibeImagen(const char *serverIpAdress, int serverPort){
         n=recvfrom(s,&buf,BUFFERT,0,(struct sockaddr *)&direccionForanea,&l);
     }
 
-    std::cout << "NUmero de octetos a trasnferir: " << count << std::endl;
+    std::cout << "[ SUCCESSS ] " << std::tab  << "Tamaño de imagen transferida: " << count << std::endl;
 
     return 1;
 }

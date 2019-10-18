@@ -39,6 +39,5 @@ void Respuesta::sendReply(char *reply, unsigned int replyLen)
 }
 
 void Respuesta::sendScreenshoot(){
-    std::cout << "Enviando imagen: " << std::endl;
     socketLocal->enviaImagen(clientIpAddress,clientPort);
 }

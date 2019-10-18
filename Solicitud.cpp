@@ -44,7 +44,7 @@ bool Solicitud::makeScreenshoot(const char *serverIpAdress, int serverPort, int 
     char *quality = (char *) calloc(3,sizeof(char));
     sprintf(quality, "%d", calidad);
 
-    memcpy(_request.args, quality, sizeof(quality));
+    memcpy(_request.args, quality, 3*sizeof(quality));
 
     PaqueteDatagrama saliente((char *)&_request, sizeof(_request), serverIpAdress, serverPort);
     socketlocal->envia(saliente);
@@ -55,6 +55,10 @@ bool Solicitud::makeScreenshoot(const char *serverIpAdress, int serverPort, int 
 
     return true;
 
+}
+
+void Solicitud::cerrarSocket(){
+    delete socketlocal;
 }
 
 
