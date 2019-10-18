@@ -44,6 +44,8 @@ bool Solicitud::makeScreenshoot(const char *serverIpAdress, int serverPort, int 
     char *quality = (char *) calloc(3,sizeof(char));
     sprintf(quality, "%d", calidad);
 
+    free(quality);
+
     memcpy(_request.args, quality, 3*sizeof(quality));
 
     PaqueteDatagrama saliente((char *)&_request, sizeof(_request), serverIpAdress, serverPort);

@@ -43,6 +43,7 @@ int main(int argc, char const *argv[]){
                     sprintf(CMD, "scrot screenshoot.png -q ");
                     strcat(CMD, solicitud->args);
                     system(CMD);
+                    free(CMD);
                     break;
                 }
             }
@@ -58,6 +59,8 @@ int main(int argc, char const *argv[]){
         }
         
         respuesta.cerrarSocket();
+        free(resultado);
+
     }
 
 

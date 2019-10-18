@@ -123,6 +123,8 @@ int SocketDatagrama::recibeImagen(const char *serverIpAdress, int serverPort){
     sprintf(extension, ".png");
     strcat(filename, extension);
 
+    free(extension);
+
     std::cout << "[ SUCCESSS ] " << std::tab  << "Creando la imagen: " << filename << std::endl;
 
 

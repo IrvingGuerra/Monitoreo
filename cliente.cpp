@@ -47,7 +47,9 @@ int main(int argc, char const *argv[]){
                 solicitud.makeScreenshoot(id_host, atoi(argv[2]), atoi(argv[5]));
             }
             solicitud.cerrarSocket();
-            
+            free(id_red_clean);
+            free(id_host);
+            free(host);
         }
         usleep(atoi(argv[3]) * 1000000);
     }
