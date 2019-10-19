@@ -69,9 +69,9 @@ int SocketDatagrama::enviaImagen(const char *serverIpAdress, int serverPort){
     bzero(&buf,BUFFERT);
     long int n;
 
-    int longitudForanea = sizeof(direccionForanea);
+    unsigned int longitudForanea = sizeof(direccionForanea);
 
-    std::cout << "[ INFO ] " << std::tab  << "Enviando imagen a: " << serverIpAdress << std::endl;
+    //std::cout << "[ INFO ] " << std::tab  << "Enviando imagen a: " << serverIpAdress << std::endl;
 
     bzero((char *)&direccionForanea, longitudForanea);
     direccionForanea.sin_family = AF_INET;
@@ -83,21 +83,36 @@ int SocketDatagrama::enviaImagen(const char *serverIpAdress, int serverPort){
         return EXIT_FAILURE;
     }
 
-    n=read(fd,buf,BUFFERT);
+    n = read(fd,buf,BUFFERT);
+
+    char temp_buf [1];
+
     while(n){
+
         if(n==-1){
             perror("Error al leer la transmicion");
             return EXIT_FAILURE;
         }
-        m=sendto(s,buf,n,0,(struct sockaddr*)&direccionForanea,longitudForanea);
-        if(m==-1){
+        m = sendto(s,buf,n,0,(struct sockaddr*)&direccionForanea,longitudForanea);
+
+        if( m == -1 ){
             perror("Error al enviar el archivo");
             return EXIT_FAILURE;
         }
-        count+=m;
-        //fprintf(stdout,"----\n%s\n----\n",buf);
-        bzero(buf,BUFFERT);
-        n=read(fd,buf,BUFFERT);
+
+        //Verificamos que el paquete le llego
+
+        recvfrom(s,&temp_buf,1,0,(struct sockaddr *)&direccionForanea,&longitudForanea);
+
+        if (temp_buf[0] == 't'){
+            //Si se envio el paquete correctamente, se envia el sig pedazo
+            count += m;
+            bzero(buf,BUFFERT);
+            n = read(fd,buf,BUFFERT);
+        }else{
+            std::cout << "[ FAIL ] " << std::tab  << "Reenviando pedazo: " << count << std::endl;
+        }
+        
     }
   //read vient de retourner 0 : fin de fichier
   
@@ -123,7 +138,7 @@ int SocketDatagrama::recibeImagen(const char *serverIpAdress, int serverPort){
     sprintf(extension, ".png");
     strcat(filename, extension);
 
-    std::cout << "[ SUCCESSS ] " << std::tab  << "Creando la imagen: " << filename << std::endl;
+    //std::cout << "[ SUCCESSS ] " << std::tab  << "Creando la imagen: " << filename << std::endl;
 
 
     if((fd=open(filename,O_CREAT|O_WRONLY|O_TRUNC,0600))==-1){
@@ -131,9 +146,9 @@ int SocketDatagrama::recibeImagen(const char *serverIpAdress, int serverPort){
         return EXIT_FAILURE;
     }
 
-    char *ip = inet_ntoa(direccionForanea.sin_addr);
+    //char *ip = inet_ntoa(direccionForanea.sin_addr);
 
-    std::cout << "[ INFO ] " << std::tab  << "Recibiendo datos de: " << ip << std::endl;
+    //std::cout << "[ INFO ] " << std::tab  << "Recibiendo datos de: " << ip << std::endl;
 
     off_t count=0, n;
 
@@ -141,22 +156,30 @@ int SocketDatagrama::recibeImagen(const char *serverIpAdress, int serverPort){
     //preparation de l'envoie
     bzero(&buf,BUFFERT);
     n = recvfrom(s, &buf,BUFFERT, 0, (struct sockaddr *)&direccionForanea, &l);
-    while(n){
 
-        //std::cout << "[ INFO ] " << std::tab << n << " bits de datos recibidos: " << std::endl;
+    char temp_buf [1];
+
+
+    while(n){
+        //std::cout << "[ INFO ] " << std::tab << n << " bits de datos recibidos " << " del pedazo " << count <<std::endl;
         if(n==-1){
-            n = 0;
             perror("Error al leer");
-            return EXIT_FAILURE;
-            //n = recvfrom(s, &buf,BUFFERT, 0, (struct sockaddr *)&direccionForanea, &l);
+            temp_buf [0] = 'f';
+            std::cout << "[ FAIL ] " << std::tab  << "Pidiendo pedazo: " << count << std::endl;
+            //return -1;
+        }else{
+            temp_buf [0] = 't';
+            count += n;
+            write(fd,buf,n);
+            bzero(buf,BUFFERT);
         }
-        count+=n;
-        write(fd,buf,n);
-        bzero(buf,BUFFERT);
-        n=recvfrom(s,&buf,BUFFERT,0,(struct sockaddr *)&direccionForanea,&l);
+
+        sendto(s,temp_buf,1,0,(struct sockaddr*)&direccionForanea,l);
+
+        n = recvfrom(s,&buf,BUFFERT,0,(struct sockaddr *)&direccionForanea,&l);
     }
 
-    std::cout << "[ SUCCESSS ] " << std::tab  << "Tamaño de imagen transferida: " << count << std::endl;
+    std::cout << "[ SUCCESSS ] " << std::tab  << "Tamaño de imagen recibido: " << count << std::endl;
 
     free(extension);
 
