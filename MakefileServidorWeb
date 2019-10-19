@@ -1,0 +1,22 @@
+PROJECT = servidorWeb
+CFLAGS = -Wall
+CC = g++
+EXCLUDED_FILES = servidor.cpp cliente.cpp Solicitud.cpp Respuesta.cpp SocketDatagrama.cpp PaqueteDatagrama.cpp
+OBJECTS = $(patsubst %.cpp, %.o, $(filter-out $(EXCLUDED_FILES), $(wildcard *.cpp)))
+OBJECTS2 = $(patsubst %.c, %.o, $(filter-out $(EXCLUDED_FILES), $(wildcard *.c)))
+
+all: $(PROJECT)
+
+%.o: %.cpp
+	$(CC) -c $< $(CFLAGS)
+
+$(PROJECT): $(OBJECTS) $(OBJECTS2)
+	$(CC) -o $@ $^
+
+.PHONY: clean
+
+clean:
+	rm -f $(OBJECTS) $(OBJECTS2) $(PROJECT)
+
+run:
+	./$(PROJECT)

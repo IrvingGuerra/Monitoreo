@@ -2,6 +2,12 @@
 #include "mongoose.h"
 #include <stdio.h>
 #include <iostream>
+#include <string.h>
+
+#define id_red "192.168.0.0"
+#define host_inicial "8"
+#define host_final "8"
+
 
 using namespace std;
 
@@ -9,15 +15,28 @@ static const char *s_http_port = "8000";
 static struct mg_serve_http_opts s_http_server_opts;
 
 
-static void handle_size(struct mg_connection *nc, struct http_message *hm) {
-		char query[256];
+static void handle_sendRedData(struct mg_connection *nc, struct http_message *hm) {
 
-		mg_get_http_var(&hm->body, "query", query,sizeof(query));
-		sprintf(query, "Longitud de la cadena = %d caracteres", (int)strlen(query));
-		printf("Cadena enviada: %s\n", query);
+	char response[256];
+	//Constriumos la respuesta
+	mg_get_http_var(&hm->body, "query", response,sizeof(response));
+	//Escribimos los datos
 
-		mg_send_head(nc,200,strlen(query), "Content-Type: text/plain");
-		mg_printf(nc, "%s", query);
+	//Escribimos ID red
+	strcpy (response, id_red);
+	
+	//Escribimos host inicial
+	strcat (response, ":");
+	strcat (response, host_inicial);
+	//Escribimos host final
+	strcat (response, ":");
+	strcat (response, host_final);
+
+	printf("Cadena enviada: %s\n", response);
+	mg_send_head(nc,200,strlen(response), "Content-Type: text/plain");
+	mg_printf(nc, "%s", response);
+
+
 }
 
 static void ev_handler(struct mg_connection *nc, int ev, void *p) {
@@ -26,12 +45,11 @@ static void ev_handler(struct mg_connection *nc, int ev, void *p) {
 
 
 	if (ev == MG_EV_HTTP_REQUEST) {
-		if (mg_vcmp(&hm->uri, "/search") == 0) { 
+		if (mg_vcmp(&hm->uri, "/startWeb") == 0) { 
 			
 			mg_get_http_var(&hm->body, "query", query,sizeof(query));
-			printf("Cadena introducida: %s\n",query);
-
-		    handle_size(nc, hm);  
+			printf("Peticion de la web: : %s\n",query);
+		    handle_sendRedData(nc, hm);  
 		}else{
 			mg_serve_http(nc, (struct http_message *) p, s_http_server_opts);
 		}

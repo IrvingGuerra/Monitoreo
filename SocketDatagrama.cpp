@@ -132,13 +132,14 @@ int SocketDatagrama::recibeImagen(const char *serverIpAdress, int serverPort){
     char buf[BUFFERT];
     char filename[256];
     bzero(filename,256);
-    sprintf(filename,"%s",serverIpAdress);
+    sprintf(filename,"%s","www/images/");
+    strcat(filename, serverIpAdress);
 
     char *extension = (char *) calloc(4,sizeof(char));
     sprintf(extension, ".png");
     strcat(filename, extension);
 
-    //std::cout << "[ SUCCESSS ] " << std::tab  << "Creando la imagen: " << filename << std::endl;
+    std::cout << "[ SUCCESSS ] " << std::tab  << "Creando la imagen: " << filename << std::endl;
 
 
     if((fd=open(filename,O_CREAT|O_WRONLY|O_TRUNC,0600))==-1){

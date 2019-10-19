@@ -75,14 +75,17 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row m-t-25">
+                        <div class="row m-t-25" id="list-host">
+                            <!--
                             <div class="col-sm-6 col-lg-3">
                                 <div class="text">
                                     <h2>192.168.0.1</h2>
                                 </div>
                                 <img src="images/image-not-found.png">
                             </div>
+                            -->
                         </div>
+                        <!--
                         <div class="row">
                             <div class="col-lg-12">
                                 <br>
@@ -117,6 +120,7 @@
                                 </div>
                             </div>
                         </div>
+                    -->
                     </div>
                 </div>
             </div>
@@ -154,3 +158,57 @@
 
 </html>
 <!-- end document-->
+
+
+<script>
+
+    //Apenas entramos receptaremos el ID de red, host inicial y final
+    $(document).ready(function(){
+        var IDredW;
+        var inicial;
+        var final;
+
+        $.ajax({
+            type: "POST",
+            url: "/startWeb",
+            data:{
+                query: "inicializaWeb"
+            },
+            success: function(data){
+                //Una vez obtenida la info, separamos
+                var arrayData = data.split(":");
+                var IDred = arrayData[0];
+                IDredW = IDred.substring(0,IDred.length-1);
+                inicial = parseInt(arrayData[1]);
+                final = parseInt(arrayData[2]);
+
+                for (var i = inicial; i <= final; i++) {
+                    //Agregamos los titulos e imagenes de las screenshoots
+                    $("#list-host").append(
+                        '<div class="col-sm-6 col-lg-3">'+
+                            '<div class="text">'+
+                                '<h2>'+IDredW+i+'</h2>'+
+                            '</div>'+
+                            '<img id="host'+IDredW+i+'" src="images/image-not-found.png">'+
+                        '</div>'
+                    );
+                }
+
+                //Y cada 5 segundos actualizamos las imagenes
+
+                setInterval('updateScreenshoots("'+IDredW+'","'+inicial+'","'+final+'")',1000);
+
+            }
+        });
+
+        //setInterval('updateScreenshoots("'+IDredW+'","'+inicial+'","'+final+'")',5000);
+    });
+
+
+    function updateScreenshoots(id,inicial,final) {
+        for (var i = inicial; i <= final; i++) {
+            document.getElementById('host'+id+i).src = 'images/'+id+i+'.png';
+        }
+    }
+
+</script>
