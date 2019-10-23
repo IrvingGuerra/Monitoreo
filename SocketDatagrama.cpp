@@ -227,5 +227,6 @@ int SocketDatagrama::recibeTimeout(PaqueteDatagrama &p, time_t segundos, susecon
 
 SocketDatagrama::~SocketDatagrama()
 {
+    printf("SE cerro el socket");
     close(s);
 }

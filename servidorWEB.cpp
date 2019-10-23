@@ -5,8 +5,8 @@
 #include <string.h>
 
 #define id_red "192.168.0.0"
-#define host_inicial "8"
-#define host_final "8"
+#define host_inicial "2"
+#define host_final "4"
 
 
 using namespace std;
