@@ -1,0 +1,30 @@
+¿Cual es una de las cuestiones importantes para entender el concepto RPC?
+A. La cuestion clave de trasnaprencia y como se relaciona con las llamadas a procedimientos remotos
+B. Optimización de memoria en la cuestion de implementacion en procedimientos remotos
+C. Filtracion de memeoria en la cuestion remota
+D. Balanceo de carga en la cuestion de procedimiento remota
+
+Un mecanismo RPC puede integrarse con un lenguaje de preogramacion si...
+A. Si inclute una notacion adecuada para definir interfaces
+B. Si es un lenguaje de alto nivel
+C. Si es un lenguaje de bajo nivel
+D. Si es un lenguaje orientado a objetos
+
+Cual es una principal opcion para garantizar la entrega en doOperation
+A. Reintentar el mensaje de solicitud hasta que llegue
+B. Cambiar de puerto y volver a enviar el mensaje
+C. Ajustar estaticamente las IPS
+D. Cambiar la RAM de una computadora
+
+RPC es generalmente implementado en un protocolo
+A. Solicitud-Respuesta
+B. Peticion-Solicitud
+C. Respuesta-Pregunta
+D. Operacion-Respuesta
+
+¿Sun RPC en lugar de permitir nombres de interfaz, que permite?
+A. Se proporciona un numero de programa y numero de version
+B. Permite cambiarle el nombre al programa
+C. Proporciona un numero de programa unicamnte
+D. Proporciona un numero de version unicamnte
+
