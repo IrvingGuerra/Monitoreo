@@ -26,11 +26,10 @@ bool Solicitud::ipDisponible(const char *serverIpAdress, int serverPort){
         }
     }
     if (i == 2) {
-        perror("El servidor no está dsponible. Intente más tarde.");
+        //perror("El servidor no está dsponible. Intente más tarde.");
         return false;
-    }else{
-        return true;
     }
+    return true;
 
 }
 

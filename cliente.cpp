@@ -41,17 +41,17 @@ int main(int argc, char const *argv[]){
             sprintf(host, "%d", i);
             strncpy(id_host, id_red_clean, size+3);
             strcat(id_host, host);
-            //std::cout << "[ INFO ] " << std::tab << "Conectandose con direccion: " << id_host << std::endl;
+            std::cout << "[ INFO ] " << std::tab << "Conectandose con direccion: " << id_host << std::endl;
             //Haremos una peticion para verificar si funciona como servidor la IP
             bool aviable = solicitud.ipDisponible(id_host, atoi(argv[2])); //Se pregunta si esta disponible
             if (aviable == true){
                 std::cout << "[ SUCCESS ] " << std::tab  << "HOST "<< id_host <<" DISPONIBLE " << std::endl;
                 //Comenzamos a pedir la imagen
                 solicitud.makeScreenshoot(id_host, atoi(argv[2]), atoi(argv[5]));
-            }else{
-                std::cout << "[ FAIL ] " << std::tab  << "HOST "<< id_host <<"  DISPONIBLE " << std::endl;
+            }else {
+                std::cout << "[ FAIL ] " << std::tab  << "HOST "<< id_host <<" NO DISPONIBLE " << std::endl;
             }
-            solicitud.cerrarSocket();          
+            //solicitud.cerrarSocket();          
             free(id_host);
             free(host);
         }
